@@ -1,4 +1,4 @@
-class Line {
+class FileLine {
 	constructor(functionExpression, interval, result) {
 		this.functionExpression = functionExpression;
 		this.interval = interval;
@@ -6,4 +6,4 @@ class Line {
 	}
 }
 
-module.exports = Line;
+module.exports = FileLine;

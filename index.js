@@ -1,4 +1,5 @@
 const DataFile = require('./DataFile');
+const WolframQuery = require('./WolframQuery');
 
 const SAME_INTERVAL_FILENAME = "functions_out_same_interval";
 const DIFFERENT_INTERVAL_FILENAME = "functions_out_diff_interval";
@@ -7,29 +8,19 @@ main();
 
 function main() {
 	const dataFileReadPromise = readIntegralDataFiles();
-	dataFileReadPromise.then((data) => {
-		const lines = getLinesFromData(data);
-		const query = buildQueryFromLines(lines);
+	dataFileReadPromise.then((lines) => {
+		return buildQueryFromLines(lines);
+	}).then((query) => {
+		
 	});
 }
 
 function readIntegralDataFiles() {
 	const sameIntervalFile = new DataFile(SAME_INTERVAL_FILENAME);
-	return sameIntervalFile.readData();
-}
-
-function getLinesFromData(data) {
-	
+	return sameIntervalFile.readLines();
 }
 
 function buildQueryFromLines(lines) {
-
-}
-
-class Line {
-	constructor(functionExpression, interval, result) {
-		this.functionExpression = functionExpression;
-		this.interval = interval;
-		this.result = result;
-	}
+	wolframQuery = new WolframQuery(lines);
+	return wolframQuery.buildQuery();
 }
