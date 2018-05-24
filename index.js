@@ -1,31 +1,35 @@
-const fs = require('fs');
-const path = require('path');
-const os = require('os');
+const DataFile = require('./DataFile');
 
-const USER_HOME = os.userInfo().homedir;
-const PATH_TO_INTEGRAL_DATA = path.join(USER_HOME, 'IntegralCalculator');
 const SAME_INTERVAL_FILENAME = "functions_out_same_interval";
 const DIFFERENT_INTERVAL_FILENAME = "functions_out_diff_interval";
-const ENCODING = "utf-8";
 
-function readIntegralDataFiles() {
-	return readDataFile(SAME_INTERVAL_FILENAME).then((data) => {
-		console.log(data);
+main();
+
+function main() {
+	const dataFileReadPromise = readIntegralDataFiles();
+	dataFileReadPromise.then((data) => {
+		const lines = getLinesFromData(data);
+		const query = buildQueryFromLines(lines);
 	});
 }
 
-readIntegralDataFiles();
+function readIntegralDataFiles() {
+	const sameIntervalFile = new DataFile(SAME_INTERVAL_FILENAME);
+	return sameIntervalFile.readData();
+}
 
-function readDataFile(fileName) {
-	return new Promise(function dataFilePromise(resolve, reject) {
-		const fileNameWithExtension = fileName + ".txt";
-		const filePath = path.join(PATH_TO_INTEGRAL_DATA, fileNameWithExtension);
-		fs.readFile(filePath, ENCODING, function handleDataFileRead(err, data) {
-			if (err) {
-				return reject(err);
-			} else {
-				return resolve(data);
-			}
-		});
-	});
+function getLinesFromData(data) {
+	
+}
+
+function buildQueryFromLines(lines) {
+
+}
+
+class Line {
+	constructor(functionExpression, interval, result) {
+		this.functionExpression = functionExpression;
+		this.interval = interval;
+		this.result = result;
+	}
 }
