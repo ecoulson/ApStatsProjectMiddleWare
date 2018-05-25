@@ -1,21 +1,24 @@
-const QUERY_START = "SetPercision[{";
+const QUERY_START = "SetPrecision[{";
 const QUERY_END = "}, 14]";
 
 class WolframQuery {
 	constructor(lines) {
 		this.lines = lines;
+		this.queries = [];
 	}
 
-	buildQuery() {
-		this.query = QUERY_START;
-		for (let i = 0; i < this.lines.length; i++) {
-			this.buildIntegrateQuery(this.lines[i]);
-			if (i < this.lines.length - 1) {
-				this.query += ", ";
+	buildQueries() {
+		for (let j = 0; j < 30; j++) {
+			this.query = QUERY_START;
+			for (let i = 0; i < 30; i++) {
+				this.buildIntegrateQuery(this.lines[i]);
+				this.query += ",";
 			}
+			this.query = this.query.substring(0, this.query.length - 1);
+			this.query += QUERY_END;
+			this.queries.push(this.query);
 		}
-		this.query += QUERY_END;
-		return this.query;
+		return this.queries;
 	}
 
 	buildIntegrateQuery(line) {
