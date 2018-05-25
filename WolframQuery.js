@@ -5,14 +5,16 @@ class WolframQuery {
 	constructor(lines) {
 		this.lines = lines;
 		this.queries = [];
+		this.queryPOS = 0;
 	}
 
 	buildQueries() {
-		for (let j = 0; j < 30; j++) {
+		for (let j = 0; j < 10; j++) {
 			this.query = QUERY_START;
-			for (let i = 0; i < 30; i++) {
-				this.buildIntegrateQuery(this.lines[i]);
+			for (let i = 0; i < 3; i++) {
+				this.buildIntegrateQuery(this.lines[this.queryPOS]);
 				this.query += ",";
+				this.queryPOS++;
 			}
 			this.query = this.query.substring(0, this.query.length - 1);
 			this.query += QUERY_END;

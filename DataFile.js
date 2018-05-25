@@ -11,6 +11,22 @@ const ENCODING = "utf-8";
 class DataFile {
 	constructor(fileName) {
 		this.fileName = fileName;
+		const fileNameWithExtension = this.fileName + ".txt";
+		this.path = path.join(PATH_TO_INTEGRAL_DATA, fileNameWithExtension)
+	}
+
+	writeFile(fileLines) {
+		let content = "";
+		let functionIndex = 0;
+		for (let i = 0; i < fileLines.length; i++) {
+			if (functionIndex == 30) {
+				content += "\n";
+				functionIndex = 0;
+			}
+			content += fileLines[i].toString() + "\n";
+			functionIndex++;
+		}
+		fs.writeFileSync(this.path, content);
 	}
 
 	readLines() {
@@ -26,9 +42,7 @@ class DataFile {
 	}
 
 	getFileData(resolve, reject) {
-		const fileNameWithExtension = this.fileName + ".txt";
-		const filePath = path.join(PATH_TO_INTEGRAL_DATA, fileNameWithExtension);
-		fs.readFile(filePath, ENCODING, function handleDataFileRead(err, data) {
+		fs.readFile(this.path, ENCODING, function handleDataFileRead(err, data) {
 			if (err) {
 				return reject(err);
 			} else {
@@ -54,7 +68,10 @@ class DataFile {
 	addLine() {
 		const textLine = this.textLines[this.currentLine];
 		if (textLine.length > 0) {
-			const functionExpression = textLine.substring(10, 50).split("=")[1].trim();
+			let functionExpression = textLine.substring(10, 50).split("=")[1].trim();
+			if (functionExpression.includes('log')) {
+				functionExpression = functionExpression.replace('log', 'log10');
+			}
 			const interval = textLine.substring(62, 96).trim().split(",");
 			const result = textLine.substring(106, 123).trim();
 			const fileLine = new FileLine(functionExpression, interval, result);
