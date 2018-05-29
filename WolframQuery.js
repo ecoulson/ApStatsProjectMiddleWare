@@ -1,5 +1,5 @@
-const QUERY_START = "SetPrecision[{";
-const QUERY_END = "}, 14]";
+const QUERY_START = "SetPrecision[";
+const QUERY_END = ", 14]";
 
 class WolframQuery {
 	constructor(lines) {
@@ -9,14 +9,10 @@ class WolframQuery {
 	}
 
 	buildQueries() {
-		for (let j = 0; j < 10; j++) {
+		for (let j = 0; j < 900; j++) {
 			this.query = QUERY_START;
-			for (let i = 0; i < 3; i++) {
-				this.buildIntegrateQuery(this.lines[this.queryPOS]);
-				this.query += ",";
-				this.queryPOS++;
-			}
-			this.query = this.query.substring(0, this.query.length - 1);
+			this.buildIntegrateQuery(this.lines[this.queryPOS]);
+			this.queryPOS++;
 			this.query += QUERY_END;
 			this.queries.push(this.query);
 		}
@@ -26,6 +22,7 @@ class WolframQuery {
 	buildIntegrateQuery(line) {
 		let subQuery = "(integrate ";
 		subQuery += line.functionExpression + ", ";
+		line.interval[0] = line.interval[0].substring(1, line.interval[0].length);
 		subQuery += "x=" + line.interval[0].trim() + "," + line.interval[1].trim();
 		subQuery += ")";
 		this.query += subQuery;
